@@ -1,25 +1,41 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class TrainConsistManagementApp {
-    public static void main (String[] args) {
 
-                HashMap<String, Integer> bogieCapacityMap = new HashMap<>();
+    static class Bogie {
+        private String name;
+        private int capacity;
 
-                bogieCapacityMap.put("First Class", 24);
-                bogieCapacityMap.put("Cargo", 120);
-                bogieCapacityMap.put("Sleeper", 72);
-                bogieCapacityMap.put("AC Chair", 56);
+        public Bogie(String name, int capacity) {
+            this.name = name;
+            this.capacity = capacity;
+        }
 
-                System.out.println("Bogie Capacity Details: ");
+        public String getName() { return name; }
+        public int getCapacity() { return capacity; }
 
-                for (Map.Entry<String, Integer> entry : bogieCapacityMap.entrySet()) {
-                    System.out.println(entry.getKey() + " -> " + entry.getValue());
-                }
+        @Override
+        public String toString() {
+            return String.format("%-12s ->  %d", name, capacity);
+        }
+    }
 
-                String searchKey = "Sleeper";
-                if(bogieCapacityMap.containsKey(searchKey)) {
-                    System.out.println("\nFast Lookup: The " + searchKey + " bogie has a capacity of " + bogieCapacityMap.get(searchKey) + ".");
-                }
+    public static void main(String[] args) {
+        List<Bogie> bogies = new ArrayList<>();
+
+        bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("Cargo", 120));
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+
+        System.out.println("Before Sorting: ");
+        bogies.forEach(System.out::println);
+
+        bogies.sort(Comparator.comparingInt(Bogie::getCapacity));
+
+        System.out.println("\nAfter Sorting: ");
+        bogies.forEach(System.out::println);
     }
 }
