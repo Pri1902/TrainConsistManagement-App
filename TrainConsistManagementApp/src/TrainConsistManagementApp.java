@@ -1,41 +1,42 @@
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.*;
 
 public class TrainConsistManagementApp {
+    public static class Bogie {
+        String type;
+        int capacity;
 
-    static class Bogie {
-        private String name;
-        private int capacity;
-
-        public Bogie(String name, int capacity) {
-            this.name = name;
+        Bogie(String type, int capacity) {
+            this.type = type;
             this.capacity = capacity;
         }
 
-        public String getName() { return name; }
-        public int getCapacity() { return capacity; }
-
         @Override
         public String toString() {
-            return String.format("%-12s ->  %d", name, capacity);
+            return type + " - Capacity: " + capacity;
         }
     }
 
+
     public static void main(String[] args) {
-        List<Bogie> bogies = new ArrayList<>();
+        List<Bogie> bogies = Arrays.asList(
+                new Bogie("First Class", 24),
+                new Bogie("Cargo", 120),
+                new Bogie("Sleeper", 72),
+                new Bogie("AC Chair", 56)
+        );
 
-        bogies.add(new Bogie("First Class", 24));
-        bogies.add(new Bogie("Cargo", 120));
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 56));
-
-        System.out.println("Before Sorting: ");
+        // Step 2: Print all bogies
+        System.out.println("All Bogies:");
         bogies.forEach(System.out::println);
 
-        bogies.sort(Comparator.comparingInt(Bogie::getCapacity));
+        // Step 3: Convert list to stream and filter
+        List<Bogie> filteredBogies = bogies.stream()
+                .filter(b -> b.capacity > 60)
+                .collect(Collectors.toList());
 
-        System.out.println("\nAfter Sorting: ");
-        bogies.forEach(System.out::println);
+        // Step 4: Print filtered bogies
+        System.out.println("\nFiltered Bogies (Capacity > 60):");
+        filteredBogies.forEach(System.out::println);
     }
 }
