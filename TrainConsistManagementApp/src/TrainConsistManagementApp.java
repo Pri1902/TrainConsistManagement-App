@@ -3,21 +3,13 @@ import java.util.stream.*;
 
 public class TrainConsistManagementApp {
     public static class Bogie {
-        String type;
-        int capacity;
+            String type;
+            int capacity;
 
-        Bogie(String type, int capacity) {
-            this.type = type;
-            this.capacity = capacity;
-        }
+            Bogie(String type, int capacity) {
+                this.type = type;
+                this.capacity = capacity;
 
-        public String getType() {
-            return type;
-        }
-
-        @Override
-        public String toString() {
-            return type + " - Capacity: " + capacity;
         }
     }
 
@@ -31,14 +23,10 @@ public class TrainConsistManagementApp {
                 new Bogie("AC Chair", 56)
         );
 
-        Map<String, List<Bogie>> groupedBogies =
-                bogies.stream()
-                        .collect(Collectors.groupingBy(Bogie::getType));
+        int totalCapacity = bogies.stream()
+                .map(b -> b.capacity)        // extract capacity
+                .reduce(0, Integer::sum);   // sum all values
 
-        System.out.println("Grouped Bogies:");
-        groupedBogies.forEach((type, list) -> {
-            System.out.println("\nType: " + type);
-            list.forEach(System.out::println);
-        });
+        System.out.println("Total Seating Capacity: " + totalCapacity);
     }
 }
