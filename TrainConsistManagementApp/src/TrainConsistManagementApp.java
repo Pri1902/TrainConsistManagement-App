@@ -11,6 +11,10 @@ public class TrainConsistManagementApp {
             this.capacity = capacity;
         }
 
+        public String getType() {
+            return type;
+        }
+
         @Override
         public String toString() {
             return type + " - Capacity: " + capacity;
@@ -19,6 +23,7 @@ public class TrainConsistManagementApp {
 
 
     public static void main(String[] args) {
+
         List<Bogie> bogies = Arrays.asList(
                 new Bogie("First Class", 24),
                 new Bogie("Cargo", 120),
@@ -26,17 +31,14 @@ public class TrainConsistManagementApp {
                 new Bogie("AC Chair", 56)
         );
 
-        // Step 2: Print all bogies
-        System.out.println("All Bogies:");
-        bogies.forEach(System.out::println);
+        Map<String, List<Bogie>> groupedBogies =
+                bogies.stream()
+                        .collect(Collectors.groupingBy(Bogie::getType));
 
-        // Step 3: Convert list to stream and filter
-        List<Bogie> filteredBogies = bogies.stream()
-                .filter(b -> b.capacity > 60)
-                .collect(Collectors.toList());
-
-        // Step 4: Print filtered bogies
-        System.out.println("\nFiltered Bogies (Capacity > 60):");
-        filteredBogies.forEach(System.out::println);
+        System.out.println("Grouped Bogies:");
+        groupedBogies.forEach((type, list) -> {
+            System.out.println("\nType: " + type);
+            list.forEach(System.out::println);
+        });
     }
 }
