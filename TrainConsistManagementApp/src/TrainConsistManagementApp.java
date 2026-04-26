@@ -1,74 +1,66 @@
-//import java.util.*;
+import java.util.*;
 
 public class TrainConsistManagementApp {
-    // Custom Runtime Exception
-    static class CargoSafetyException extends RuntimeException {
-        public CargoSafetyException(String message) {
-            super(message);
-        }
-    }
+    // Method to perform Bubble Sort
+    public static void bubbleSort(int[] capacities) {
+        int n = capacities.length;
 
-    // Enum for cargo types
-    enum CargoType {
-        COAL, GRAINS, PETROLEUM
-    }
+        // Outer loop → number of passes
+        for (int i = 0; i < n - 1; i++) {
 
-    // Abstract Bogie class
-    static abstract class GoodsBogie {
-        String shape;
-        CargoType cargo;
+            // Inner loop → compare adjacent elements
+            for (int j = 0; j < n - i - 1; j++) {
 
-        public GoodsBogie(String shape) {
-            this.shape = shape;
-        }
+                // If left > right → swap
+                if (capacities[j] > capacities[j + 1]) {
 
-        public void assignCargo(CargoType cargo) {
-            try {
-                if (shape.equalsIgnoreCase("Rectangular") && cargo == CargoType.PETROLEUM) {
-                    throw new CargoSafetyException("Unsafe cargo assignment!");
+                    // Swapping logic
+                    int temp = capacities[j];
+                    capacities[j] = capacities[j + 1];
+                    capacities[j + 1] = temp;
                 }
-
-                this.cargo = cargo;
-                System.out.println("Cargo assigned successfully -> " + cargo);
-
-            } catch (CargoSafetyException e) {
-                System.out.println("Error: " + e.getMessage());
-
-            } finally {
-                System.out.println("Cargo validation completed for " + shape + " bogie\n");
             }
         }
     }
 
-    // Rectangular Bogie
-    static class RectangularBogie extends GoodsBogie {
-        public RectangularBogie() {
-            super("Rectangular");
+    // Method to display array
+    public static void display(int[] arr) {
+        for (int val : arr) {
+            System.out.print(val + " ");
         }
-    }
-
-    // Cylindrical Bogie
-    static class CylindricalBogie extends GoodsBogie {
-        public CylindricalBogie() {
-            super("Cylindrical");
-        }
+        System.out.println();
     }
 
     public static void main(String[] args) {
     System.out.println("========================================");
-        System.out.println("UC15 - Safe Cargo Assignment");
+        System.out.println("UC16 - Sort Passenger Bogie Capacities");
         System.out.println("========================================\n");
 
-        GoodsBogie cylindrical = new CylindricalBogie();
-        GoodsBogie rectangular = new RectangularBogie();
+        Scanner sc = new Scanner(System.in);
 
-        // Valid case
-        cylindrical.assignCargo(CargoType.PETROLEUM);
+        // User input
+        System.out.print("Enter number of bogies: ");
+        int n = sc.nextInt();
 
-        // Invalid case
-        rectangular.assignCargo(CargoType.PETROLEUM);
+        int[] capacities = new int[n];
 
-        System.out.println("UC15 runtime handling completed...");
+        System.out.println("Enter capacities:");
+        for (int i = 0; i < n; i++) {
+            capacities[i] = sc.nextInt();
+        }
 
+        // Before sorting
+        System.out.print("\nBefore Sorting: ");
+        display(capacities);
+
+        // Bubble Sort
+        bubbleSort(capacities);
+
+        // After sorting
+        System.out.print("After Sorting: ");
+        display(capacities);
+
+        System.out.println("\nSorting completed using Bubble Sort.");
+        System.out.println("Program continues safely...");
     }
 }
