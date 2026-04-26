@@ -2,69 +2,52 @@ import java.util.*;
 
 public class TrainConsistManagementApp {
     // Binary Search Method
-    public static int binarySearch(String[] bogieIDs, String key) {
+    // Method to search bogie ID (Linear Search for simplicity)
+    public static void searchBogie(List<String> bogieList, String key) {
 
-        int low = 0;
-        int high = bogieIDs.length - 1;
+        // Defensive check (Fail-Fast)
+        if (bogieList.isEmpty()) {
+            throw new IllegalStateException("Cannot perform search: No bogies available in the train.");
+        }
 
-        while (low <= high) {
+        // Search logic (only runs if list is NOT empty)
+        boolean found = false;
 
-            // Compute mid index
-            int mid = (low + high) / 2;
-
-            // Compare using compareTo()
-            int result = key.compareTo(bogieIDs[mid]);
-
-            if (result == 0) {
-                return mid; // Found
-            } else if (result > 0) {
-                low = mid + 1; // Search right half
-            } else {
-                high = mid - 1; // Search left half
+        for (int i = 0; i < bogieList.size(); i++) {
+            if (bogieList.get(i).equals(key)) {
+                System.out.println("Bogie ID found at position: " + i);
+                found = true;
+                break;
             }
         }
 
-        return -1; // Not found
+        if (!found) {
+            System.out.println("Bogie ID not found.");
+        }
     }
 
     public static void main(String[] args) {
-     System.out.println("========================================");
-        System.out.println("UC19 - Search Bogie ID (Binary Search)");
+      System.out.println("========================================");
+        System.out.println("UC20 - Fail-Fast Search Validation");
         System.out.println("========================================\n");
 
         Scanner sc = new Scanner(System.in);
 
-        // Input size
-        System.out.print("Enter number of bogies: ");
-        int n = sc.nextInt();
-        sc.nextLine();
+        // Empty bogie collection
+        List<String> bogieList = new ArrayList<>();
 
-        String[] bogieIDs = new String[n];
-
-        // Input sorted IDs
-        System.out.println("Enter bogie IDs (sorted):");
-        for (int i = 0; i < n; i++) {
-            bogieIDs[i] = sc.nextLine();
-        }
-
-        // Optional safety: ensure sorted
-        Arrays.sort(bogieIDs);
-
-        // Search key
-        System.out.print("\nEnter bogie ID to search: ");
+        System.out.print("Enter bogie ID to search: ");
         String key = sc.nextLine();
 
-        // Perform binary search
-        int index = binarySearch(bogieIDs, key);
+        try {
+            // Attempt search on empty list
+            searchBogie(bogieList, key);
 
-        // Output result
-        if (index != -1) {
-            System.out.println("Bogie ID found at position: " + index);
-        } else {
-            System.out.println("Bogie ID not found.");
+        } catch (IllegalStateException e) {
+            // Handle runtime exception gracefully
+            System.out.println("Error: " + e.getMessage());
         }
 
-        System.out.println("\nBinary search completed.");
-        System.out.println("Program continues safely...");
+        System.out.println("\nProgram continues safely...");
     }
 }
