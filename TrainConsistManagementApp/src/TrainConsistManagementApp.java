@@ -1,44 +1,74 @@
-import java.util.*;
+//import java.util.*;
 
 public class TrainConsistManagementApp {
-    public static class GoodsBogie {
-        String type;
-        String cargo;
-
-        GoodsBogie(String type, String cargo) {
-            this.type = type;
-            this.cargo = cargo;
-        }
-
-        @Override
-        public String toString() {
-            return type + " - Cargo: " + cargo;
+    // Custom Runtime Exception
+    static class CargoSafetyException extends RuntimeException {
+        public CargoSafetyException(String message) {
+            super(message);
         }
     }
-    public static void main(String[] args) {
 
-        // Step 1: Create list of goods bogies
-        List<GoodsBogie> bogies = Arrays.asList(
-                new GoodsBogie("Cylindrical", "Petroleum"),
-                new GoodsBogie("Box", "Grain"),
-                new GoodsBogie("Flatbed", "Steel"),
-                new GoodsBogie("Cylindrical", "Petroleum")
-        );
+    // Enum for cargo types
+    enum CargoType {
+        COAL, GRAINS, PETROLEUM
+    }
 
-        // Step 2, 3, 4: Stream + allMatch + lambda rule
-        boolean isSafe = bogies.stream()
-                .allMatch(b ->
-                        // Rule: If Cylindrical → only Petroleum allowed
-                        !b.type.equalsIgnoreCase("Cylindrical") ||
-                                b.cargo.equalsIgnoreCase("Petroleum")
-                );
+    // Abstract Bogie class
+    static abstract class GoodsBogie {
+        String shape;
+        CargoType cargo;
 
-        // Step 5: Display result
-        if (isSafe) {
-            System.out.println("Train is SAFE");
-        } else {
-            System.out.println("Train is NOT SAFE ");
+        public GoodsBogie(String shape) {
+            this.shape = shape;
         }
+
+        public void assignCargo(CargoType cargo) {
+            try {
+                if (shape.equalsIgnoreCase("Rectangular") && cargo == CargoType.PETROLEUM) {
+                    throw new CargoSafetyException("Unsafe cargo assignment!");
+                }
+
+                this.cargo = cargo;
+                System.out.println("Cargo assigned successfully -> " + cargo);
+
+            } catch (CargoSafetyException e) {
+                System.out.println("Error: " + e.getMessage());
+
+            } finally {
+                System.out.println("Cargo validation completed for " + shape + " bogie\n");
+            }
+        }
+    }
+
+    // Rectangular Bogie
+    static class RectangularBogie extends GoodsBogie {
+        public RectangularBogie() {
+            super("Rectangular");
+        }
+    }
+
+    // Cylindrical Bogie
+    static class CylindricalBogie extends GoodsBogie {
+        public CylindricalBogie() {
+            super("Cylindrical");
+        }
+    }
+
+    public static void main(String[] args) {
+    System.out.println("========================================");
+        System.out.println("UC15 - Safe Cargo Assignment");
+        System.out.println("========================================\n");
+
+        GoodsBogie cylindrical = new CylindricalBogie();
+        GoodsBogie rectangular = new RectangularBogie();
+
+        // Valid case
+        cylindrical.assignCargo(CargoType.PETROLEUM);
+
+        // Invalid case
+        rectangular.assignCargo(CargoType.PETROLEUM);
+
+        System.out.println("UC15 runtime handling completed...");
 
     }
 }
